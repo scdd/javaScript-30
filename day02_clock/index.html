@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JS + CSS Clock</title>
+    <style>
+        html {
+            background: #fff;
+            font-family: 'helvetica neue';
+            text-align: center;
+            font-size: 10px;
+        }
+
+        body {
+            margin: 0;
+            font-size: 2rem;
+            display: flex;
+            flex: 1;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        .clock {
+            width: 30rem;
+            height: 30rem;
+            background:url(images/bg.png) no-repeat;
+            background-size: 100% 100%;
+            border-radius: 50%;
+            margin: 50px auto;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .clock-face {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform: translateY(-3px);
+            /* account for the height of the clock hands */
+        }
+
+        .hand {
+            height: 6px;
+            position: absolute;
+            top: 50%;
+            transform-origin: 100% 50%;
+        }
+
+        .clock .clock-face .hour-hand {
+            width: 25%;
+            background: red;
+            left: 20%;
+
+        }
+
+        .clock .clock-face .min-hand {
+            width: 35%;
+            background: blue;
+
+            left: 10%;
+        }
+
+        .clock .clock-face .second-hand {
+            width: 45%;
+            background:#000;
+            transition: transform 0.1s;
+            transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="clock">
+        <div class="clock-face">
+            <div class="hand hour-hand"></div>
+            <div class="hand min-hand"></div>
+            <div class="hand second-hand"></div>
+        </div>
+    </div>
+    <script>
+        let time = new Date(),
+            currentHour = time.getHours(),
+            currentMin = time.getMinutes(),
+            currentSec = time.getSeconds(),
+            hourAngle = currentHour * 360/12 + currentMin * 360/(12*60) + 90,//转化成时钟对应角度
+            minAngle = currentMin * 360/60 + currentSec * 360/(60*60) + 90,
+            secAngle = currentSec * 360/60 + 90,
+            hourHand = document.querySelector('.hour-hand'),
+            minHand = document.querySelector('.min-hand'),
+            secHand = document.querySelector('.second-hand');
+
+            function getAngle() {
+                hourHand.style.transform = `rotate(${hourAngle}deg)`;
+                minHand.style.transform = `rotate(${minAngle}deg)`;
+                secHand.style.transform = `rotate(${secAngle}deg)`;
+            };
+            function addAngle() {
+                hourAngle = hourAngle + 360 / (12*60*60);//每一个小时所增加的角度
+                minAngle = minAngle + 360 / (60*60);
+                secAngle = secAngle + 360 / 60;   
+                getAngle();
+            };
+            getAngle();
+            setInterval(addAngle, 1000);
+    </script>
+</body>
+</html>
